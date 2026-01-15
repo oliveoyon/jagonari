@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdmitCardController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\GalleryEventController;
 use App\Http\Controllers\Admin\GalleryImageController;
 use App\Http\Controllers\Admin\GeneralSettingController;
@@ -11,11 +12,29 @@ use App\Http\Controllers\Admin\JobCircularController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [WebController::class, 'home']);
+Route::get('/contact', [WebController::class, 'contact']);
+Route::post('/contact', [WebController::class, 'storeContact'])->name('contact.store');
+
+Route::get('/jobs', [WebController::class, 'jobList'])->name('web.jobs.list');
+Route::get('/jobs/{slug}', [WebController::class, 'jobDetail'])->name('web.jobs.detail');
+Route::post('/jobs/{slug}/apply', [WebController::class, 'applyJob'])->name('web.jobs.apply');
+
+
+// Dynamic page route (catch-all) - keep at the bottom
+Route::get('/{slug}', [WebController::class, 'showPage'])
+    ->where('slug', '^(?!login|register|password|dashboard|admin|contact|jobs).*$')
+    ->name('dynamic.page');
+
+
+
 
 Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
@@ -50,9 +69,16 @@ Route::middleware(['auth'])
         Route::resource('gallery-events', GalleryEventController::class)->names('gallery-events');
 
         Route::resource('gallery-images', GalleryImageController::class)->names('gallery-images');
-
-        // Bulk store route (same as store but for multiple files)
         Route::post('gallery-images/bulk-store', [GalleryImageController::class, 'bulkStore'])->name('gallery-images.bulk-store');
+
+        Route::get('contact-messages', [ContactMessageController::class, 'index'])
+            ->name('contact-messages.index');
+
+        Route::get('contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])
+            ->name('contact-messages.show');
+
+        Route::delete('contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])
+            ->name('contact-messages.destroy');
     });
 
 require __DIR__ . '/auth.php';
