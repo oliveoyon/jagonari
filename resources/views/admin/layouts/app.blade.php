@@ -144,6 +144,23 @@
                             </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a href="{{ route('admin.notices.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.notices.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-bullhorn"></i>
+                                <p>নোটিশ বোর্ড</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.contact-messages.index') }}"
+                                class="nav-link {{ request()->routeIs('contact-messages.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-envelope"></i>
+                                <p>যোগাযোগ বার্তা</p>
+                            </a>
+                        </li>
+
+
 
 
                     </ul>
@@ -163,9 +180,10 @@
     </div>
 
     {{-- AdminLTE JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
     @stack('scripts')
 
 </body>

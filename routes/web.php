@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\HomeSliderController;
 use App\Http\Controllers\Admin\JobApplicationController;
 use App\Http\Controllers\Admin\JobCircularController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebController;
@@ -29,11 +30,17 @@ Route::post('/contact', [WebController::class, 'storeContact'])->name('contact.s
 Route::get('/jobs', [WebController::class, 'jobList'])->name('web.jobs.list');
 Route::get('/jobs/{slug}', [WebController::class, 'jobDetail'])->name('web.jobs.detail');
 Route::post('/jobs/{slug}/apply', [WebController::class, 'applyJob'])->name('web.jobs.apply');
+Route::get('/gallery', [WebController::class, 'galleryEvents'])->name('gallery.events');
+
+Route::get('/gallery/event/{slug}', [WebController::class, 'galleryByEvent'])
+    ->name('gallery.event.images');
+Route::get('/notice-board', [WebController::class, 'noticeBoard'])->name('notice.board');
+Route::get('/notice-board/{id}', [WebController::class, 'noticeDetail'])->name('notice.detail');
 
 
 // Dynamic page route (catch-all) - keep at the bottom
 Route::get('/{slug}', [WebController::class, 'showPage'])
-    ->where('slug', '^(?!login|register|password|dashboard|admin|storage-link|contact|jobs).*$')
+    ->where('slug', '^(?!login|register|password|dashboard|admin|storage-link|contact|jobs|gallery|notice-board).*$')
     ->name('dynamic.page');
 
 
@@ -82,6 +89,8 @@ Route::middleware(['auth'])
 
         Route::delete('contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])
             ->name('contact-messages.destroy');
+        
+        Route::resource('notices', NoticeController::class);
     });
 
 require __DIR__ . '/auth.php';

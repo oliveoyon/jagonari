@@ -6,7 +6,10 @@ use App\Models\ContactMessage;
 use App\Models\HomeSlider;
 use App\Models\JobApplication;
 use App\Models\JobCircular;
+use App\Models\GalleryEvent;
+use App\Models\GalleryImage;
 use App\Models\Menu;
+use App\Models\Notice;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
 
@@ -87,5 +90,48 @@ class WebController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Your application has been submitted successfully.');
+    }
+
+    // Show gallery events
+    public function galleryEvents()
+    {
+        $events = GalleryEvent::where('is_active', 1)
+            ->orderBy('display_order')
+            ->get();
+
+        return view('web.gallery.events', compact('events'));
+    }
+
+    // Show images by event
+    public function galleryByEvent($slug)
+    {
+        $event = GalleryEvent::where('slug', $slug)
+            ->where('is_active', 1)
+            ->firstOrFail();
+
+        $images = GalleryImage::where('event_id', $event->id)
+            ->where('is_active', 1)
+            ->orderBy('display_order')
+            ->get();
+
+        return view('web.gallery.images', compact('event', 'images'));
+    }
+
+    public function noticeBoard()
+    {
+        $notices = Notice::where('is_active', 1)
+                         ->orderBy('published_at', 'desc')
+                         ->get();
+
+        return view('web.notice-board', compact('notices'));
+    }
+
+    public function noticeDetail($id)
+    {
+        $notice = Notice::where('id', $id)
+                        ->where('is_active', 1)
+                        ->firstOrFail();
+
+        return view('web.notice-detail', compact('notice'));
     }
 }

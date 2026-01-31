@@ -159,6 +159,8 @@
                         @endforeach
 
                         <li><a href="{{ url('/jobs') }}">জব সার্কুলার</a></li>
+                        <li><a href="{{ url('/notice-board') }}">নোটিশ</a></li>
+                        <li><a href="{{ url('/gallery') }}">গ্যালারী</a></li>
                         <li><a href="{{ url('/contact') }}">যোগাযোগ</a></li>
                     </ul>
 
